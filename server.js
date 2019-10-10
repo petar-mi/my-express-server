@@ -158,9 +158,13 @@ app.get('/checkUser/:id', async (req, res, next) => {
 });
 
 app.get('/test/:id', async (req, res, next) => {
-  console.log("Primljen je test request sa parametrom", req.params.id);
+  try {
+    console.log("Primljen je test request sa parametrom", req.params.id);
+  } catch (error) {
+    console.log(error);
+  }
 
-  res.send({ message: "Test uspeo", id: req.params.id });
+  //res.send({ message: "Test uspeo", id: req.params.id });
 });
 
 app.get('/user/:id', async (req, res, next) => {
