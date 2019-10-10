@@ -160,11 +160,12 @@ app.get('/checkUser/:id', async (req, res, next) => {
 app.get('/test/:id', async (req, res, next) => {
   try {
     console.log("Primljen je test request sa parametrom", req.params.id);
+    res.send({ message: "Test uspeo", id: req.params.id });
   } catch (error) {
     console.log(error);
   }
 
-  //res.send({ message: "Test uspeo", id: req.params.id });
+  
 });
 
 app.get('/user/:id', async (req, res, next) => {
@@ -803,7 +804,8 @@ app.post('/feed', function (req, res, next) {
 });
 
 
-mongoose.connect('mongodb://localhost:27017/tweetsDB', { useNewUrlParser: true })
+//mongoose.connect('mongodb://localhost:27017/tweetsDB', { useNewUrlParser: true })
+mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/tweets_db', { useNewUrlParser: true })
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
