@@ -214,7 +214,7 @@ app.get('/user/:id', async (req, res, next) => {
 
   // ****
 
-  
+
   //******   VAZNO   *******
   //****** PUPPETEER - otkomentarisati da bi islo na tviter i kupilo tvitove *********
   // const browser = await puppeteer.launch({ headless: false, }); // zakomentarisano jer ne radi u produkciji na heroku
@@ -809,7 +809,7 @@ app.post('/feed', function (req, res, next) {
 
 
 //mongoose.connect('mongodb://localhost:27017/tweetsDB', { useNewUrlParser: true })
-mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/tweets_db', { useNewUrlParser: true })
+mongoose.connect('mongodb://psmokvic:novasifra1@ds052978.mlab.com:52978/tweets_db', { useNewUrlParser: true }) // psmokvic i novasifra1 kreirani su kao User na sajtu mLab-a i treba ih ubaciti u connection string
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
