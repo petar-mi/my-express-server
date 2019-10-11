@@ -154,7 +154,11 @@ app.get('/checkUser/:id', async (req, res, next) => {
       res.send({ message: "NE postoji u bazi" });
     }
   }
+  try {
   ckeckIfUserExistsInDb();
+} catch (e) {
+  console.log(e);
+}
 });
 
 app.get('/user/:id', async (req, res, next) => {
