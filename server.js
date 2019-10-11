@@ -154,7 +154,11 @@ app.get('/checkUser/:id', async (req, res, next) => {
       res.send({ message: "NE postoji u bazi" });
     }
   }
-  ckeckIfUserExistsInDb();
+  try {
+    ckeckIfUserExistsInDb();
+  } catch (e) {
+    console.log(e);
+  }
 });
 
 app.get('/test/:id', async (req, res, next) => {
@@ -212,9 +216,8 @@ app.get('/user/:id', async (req, res, next) => {
 
   //******   VAZNO   *******
   //****** PUPPETEER - otkomentarisati da bi islo na tviter i kupilo tvitove *********
-  const browser = await puppeteer.launch({
-    headless: false,
-  });
+  // const browser = await puppeteer.launch({ headless: false, }); // zakomentarisano jer ne radi u produkciji na heroku
+  const browser = await puppeteer.launch({args: ['--no-sandbox', '--disable-setuid-sandbox']});
   const page = await browser.newPage();
   page.setViewport({ width: 800, height: 800 });
   await page.goto(`https://twitter.com/${req.params.id}`); // URL is given by the "user" (your client-side application)
@@ -804,8 +807,8 @@ app.post('/feed', function (req, res, next) {
 });
 
 
-//mongoose.connect('mongodb://localhost:27017/tweetsDB', { useNewUrlParser: true })
-mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/tweets_db', { useNewUrlParser: true })
+mongoose.connect('mongodb://localhost:27017/tweetsDB', { useNewUrlParser: true })
+//mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/tweets_db', { useNewUrlParser: true })
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
