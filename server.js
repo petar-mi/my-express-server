@@ -214,6 +214,7 @@ app.get('/user/:id', async (req, res, next) => {
 
   // ****
 
+  
   //******   VAZNO   *******
   //****** PUPPETEER - otkomentarisati da bi islo na tviter i kupilo tvitove *********
   // const browser = await puppeteer.launch({ headless: false, }); // zakomentarisano jer ne radi u produkciji na heroku
