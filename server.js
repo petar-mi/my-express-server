@@ -807,8 +807,8 @@ app.post('/feed', function (req, res, next) {
 });
 
 
-mongoose.connect('mongodb://localhost:27017/tweetsDB', { useNewUrlParser: true })
-//mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/tweets_db', { useNewUrlParser: true })
+//mongoose.connect('mongodb://localhost:27017/tweetsDB', { useNewUrlParser: true })
+mongoose.connect('mongodb://<dbuser>:<dbpassword>@ds052978.mlab.com:52978/tweets_db', { useNewUrlParser: true })
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error('Could not connect to MongoDB...', err));
 
