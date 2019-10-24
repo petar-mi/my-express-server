@@ -9,8 +9,8 @@ app.use(express.json());
 app.use(cors()); // enables CORS for all requests
 app.use(socketIndex);
 const server = http.createServer(app);
-const io = socketIo(server); // da nismo koristili namespace (nsp), ovde bi bilo global.io kako bi bilo dostupno i u modulu user
-global.nsp = io.of('/my-namespace'); // umesto const nsp pisemo global kako bi bilo dostupno i u modulu user
+const io = socketIo(server); // if namespace(nsp) isn't used, we would define this as global.io for it to be available in user module as well
+global.nsp = io.of('/my-namespace'); // instead of const nsp we are defining it as global.nsp for it to be available in user module as well
 
 const test = require('./routes/test');
 const checkUser = require('./routes/checkUser');
@@ -21,9 +21,13 @@ app.use('/checkUser', checkUser);
 app.use('/feed', feed);
 app.use('/user', user);
 
+let connectionString = "mongodb://psmokvic:novasifra1@ds052978.mlab.com:52978/tweets_db";
+if (process.env.REACT_APP_MY_MACHINE && process.env.REACT_APP_MY_MACHINE === "zekan") {
+  connectionString = 'mongodb://localhost:27017/tweetsDB';
+  console.log('running on localserver');
+}
 
-//mongoose.connect('mongodb://localhost:27017/tweetsDB', { useNewUrlParser: true })
-mongoose.connect('mongodb://psmokvic:novasifra1@ds052978.mlab.com:52978/tweets_db', { useNewUrlParser: true }) // psmokvic i novasifra1 kreirani su kao User na sajtu mLab-a i treba ih ubaciti u connection string
+mongoose.connect(connectionString, { useNewUrlParser: true })
   .then(() => console.log("Connected to MongoDB..."))
   .catch(err => console.error('Could not connect to MongoDB...', err));
 

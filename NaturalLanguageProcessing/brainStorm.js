@@ -6,16 +6,15 @@ function classifyTweetsFunc(file_path, stemmer, callback) {
 }
 
 function teachClassifier(file_path, tweets, callback) {
-    console.log('funkcija teachClassifier je pozvana i izvrsava addDocument za svaki tvit. Ovaj log je iz brainStorm.js');
+    console.log('Logging from brainStorm.js... teachClassifier function has been called and executes addDocument for each tweet.');
     tweets.forEach(element => {
         //console.log(element.text + " " + element.category);
         classifier.addDocument(element.text, element.category);
     });
     classifier.train();
-    console.log('ovo je log izmedju train i save metode. Ovaj log je iz brainStorm.js');
+    console.log('Logging from brainStorm.js between train and save methods');
     classifier.save(file_path, callback);
 }
-
 
 exports.classifyTweets = classifyTweetsFunc;
 exports.teach = teachClassifier;
