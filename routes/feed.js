@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 const fs = require('fs');
 var classificator = require('../NaturalLanguageProcessing/brainStorm');
-const { Tweet } = require('../models/tweetModel');
+const { Tweet } = require('../models/tweetModel'); // must be required this way with parenthesis { Tweet }, would't work otherwise
 
 router.post('/', function (req, res, next) {
 
-    console.log("sledeci user objekat je stigao i tvitovi ce biti arhivirani pod njegovim id-jem");
+    console.log("The following object has arrived and tweets will be stored with it's id");
     console.log(req.body.userDbObj);
   
     fs.readFile('NaturalLanguageProcessing/trainingData.json', (err, file) => {
@@ -15,13 +15,11 @@ router.post('/', function (req, res, next) {
   
       let updatedArray = oldArray.concat(newArray);
   
-  
-      function finalMapping(arrayOfObjects) { // pre snimanja stvara novi niz koji se sastoji samo iz jedinstvenih tekstova tvitova
+      function finalMapping(arrayOfObjects) { // creates an array of unique tweets
         let arrayOfObjectsMap = [];
         let map = new Map();
         for (let item of arrayOfObjects) {
           if (!map.has(item.text)) {
-            // set any value to Map (mogli smo mapirati i pomocu nameString propertija, svejedno je u ovom slucaju)
             map.set(item.text, true); // set any value to Map
             arrayOfObjectsMap.push({
               text: item.text,
@@ -45,16 +43,15 @@ router.post('/', function (req, res, next) {
             if (err) {
               return console.log(err);
             }
-            console.log('training saved!');
+            console.log('Training saved!');
           });
         });
   
       });
   
-      console.log("////Tvitovi koji su stigli iz Reacta da budu snimljeni u bazu osim ako nisu vec tamo: ///////");
+      console.log("//// Tweets that arrived from React to be saved in db (if they aren't saved already): ////");
       console.log(req.body.editedTweets);
       console.log("///////////");
-  
   
       req.body.editedTweets.forEach(tweet => {
         async function ckeckIfTweetExists() {
@@ -68,20 +65,20 @@ router.post('/', function (req, res, next) {
             });
   
             let savedTweet = await newTweetToSave.save()
-              .catch(err => console.error('Greska pri snimanju tweet dokumenta: ', err));
+              .catch(err => console.error('Error while saving tweet document: ', err));
             if (savedTweet) {
-              console.log("Snimljen je tweet: ");
+              console.log("Tweet that has been saved: ");
               console.log(savedTweet);
             }
           } else {
-            console.log("Ovaj tvit vec postoji u bazi i NECE biti snimljen ponovo: ", existingTweet);
+            console.log("This tweet exists in db and will NOT be saved: ", existingTweet);
           }
         }
         ckeckIfTweetExists();
       });
     });
   
-    res.send("Snimanje zavrseno, pozdrav sa serverske strane");
+    res.send("Saving finished, greetings from the server-side!");
   });
 
 module.exports = router;
