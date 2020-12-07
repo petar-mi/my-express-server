@@ -26,17 +26,18 @@ function extractTweets(tweets) {
   for (let element of extractedParentElements) {
     // tweets.push(element.firstElementChild.innerText); // logged-in case
     // tweets.push(element.innerText); // without logging-in  
-    tweets.push(element.firstElementChild.innerText); // modified on Oct 18 2020 to fit current twitter layout
+    // tweets.push(element.firstElementChild.innerText); // modified on Oct 18 2020 to fit current twitter layout
   }
   console.log(tweets);
   console.log("*********************************************");
+  tweets.push(extractedParentElements.length)
   return tweets;
 }
 
 async function scrTweets(page, extractTweets) {
   let tweets = [];
   try {
-    for (let i = 0; i < 2; i++) { // sets the number of time scrolling will be performed (set to i < 1 for testing purposes only)
+    for (let i = 0; i < 1; i++) { // sets the number of time scrolling will be performed (set to i < 1 for testing purposes only)
       tweets = await page.evaluate(extractTweets, tweets);
       await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
       console.log(i + 1 + '. scroll performed');
