@@ -35,13 +35,21 @@ function extractTweets(tweets) {
   tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').length));
   tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0').length));
   document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').forEach(a => tweets.push(a.innerText));
+  for (const el of document.querySelectorAll("span")) {
+    if (el.innerText.includes("vegan")) {
+      tweets.push("elem : " + el.textContent);
+      tweets.push("elem : " + el.className);
+      tweets.push("Parent elem: " + el.parentElement);
+      tweets.push("Parent elem: " + el.parentElement.className);
+    }
+  }
   return tweets;
 }
 
 async function scrTweets(page, extractTweets) {
   let tweets = [];
   try {
-    for (let i = 0; i < 5; i++) { // sets the number of time scrolling will be performed (set to i < 1 for testing purposes only)
+    for (let i = 0; i < 2; i++) { // sets the number of time scrolling will be performed (set to i < 1 for testing purposes only)
       tweets = await page.evaluate(extractTweets, tweets);
       await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
       console.log(i + 1 + '. scroll performed');
