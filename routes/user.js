@@ -26,11 +26,11 @@ function extractTweets(tweets) {
   for (let element of extractedParentElements) {
     // tweets.push(element.firstElementChild.innerText); // logged-in case
     // tweets.push(element.innerText); // without logging-in  
-    // tweets.push(element.firstElementChild.innerText); // modified on Oct 18 2020 to fit current twitter layout
+    tweets.push(element.firstElementChild.innerText); // modified on Oct 18 2020 to fit current twitter layout
   }
   console.log(tweets);
   console.log("*********************************************");
-  tweets.push(extractedParentElements.length)
+  tweets.push(String(document.getElementsByClassName('css-901oao').length));
   return tweets;
 }
 
@@ -58,6 +58,8 @@ router.get('/:id', async (req, res, next) => {
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }); // for Heroku deployment env
   const page = await browser.newPage();
   page.setViewport({ width: 800, height: 800 });
+  page.on('load', () => console.log("Loaded: " + page.url())); // just sets a listener that logs a loaded page
+
   await page.goto(`https://twitter.com/${req.params.id}`);
 
   await page.waitFor(5000); // time set deliberately for page to load
