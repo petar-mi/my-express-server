@@ -30,7 +30,10 @@ function extractTweets(tweets) {
   }
   console.log(tweets);
   console.log("*********************************************");
-  tweets.push(String(document.getElementsByClassName('css-901oao').length));
+  tweets.push('css-901oao ' + String(document.getElementsByClassName('css-901oao').length));
+  tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6').length));
+  tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').length));
+  tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0').length));
   return tweets;
 }
 
@@ -57,7 +60,7 @@ router.get('/:id', async (req, res, next) => {
   // const browser = await puppeteer.launch({ headless: false, }); // only for localhost
   const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }); // for Heroku deployment env
   const page = await browser.newPage();
-  page.setViewport({ width: 800, height: 800 });
+  page.setViewport({ width: 800, height: 1200 });
   page.on('load', () => console.log("Loaded: " + page.url())); // just sets a listener that logs a loaded page
 
   await page.goto(`https://twitter.com/${req.params.id}`);
