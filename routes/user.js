@@ -21,10 +21,13 @@ nsp.on('connection', function (socket) { // listens to any new connection and ex
 function extractTweets(tweets) {
   // const extractedParentElements = document.getElementsByClassName('css-901oao r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0');                               
   // previous line is for crawling while being logged-in!!! 
-  const extractedParentElements = document.getElementsByClassName('TweetTextSize TweetTextSize--normal js-tweet-text tweet-text'); // when puppeteer crawls w/o logging-in
+  //const extractedParentElements = document.getElementsByClassName('TweetTextSize TweetTextSize--normal js-tweet-text tweet-text'); // when puppeteer crawls w/o logging-in
+  // const extractedParentElements = document.getElementsByClassName('css-901oao r-hkyrab r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0'); // modified on Oct 18 2020 to fit current twitter layout ( also when puppeteer crawls w/o logging-in)
+  const extractedParentElements = document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0'); // modified on Dec 4 2020 to fit current twitter layout
   for (let element of extractedParentElements) {
     // tweets.push(element.firstElementChild.innerText); // logged-in case
-    tweets.push(element.innerText); // without logging-in
+    // tweets.push(element.innerText); // without logging-in  
+    tweets.push(element.firstElementChild.innerText); // modified on Oct 18 2020 to fit current twitter layout
   }
   console.log(tweets);
   console.log("*********************************************");
@@ -49,14 +52,23 @@ async function scrTweets(page, extractTweets) {
 router.get('/:id', async (req, res, next) => {
   console.log(req.params.id);
 
-  //****** PUPPETEER - comment-out if using mock tweets array *********
-  // const browser = await puppeteer.launch({ headless: false, }); // headless would not work on Heroku
-  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
+  // ***** PUPPETEER - comment-out if using mock tweets array *********
+  // const browser = await puppeteer.launch({ headless: false, }); // only for localhost
+  const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] }); // for Heroku deployment env
   const page = await browser.newPage();
   page.setViewport({ width: 800, height: 800 });
   await page.goto(`https://twitter.com/${req.params.id}`);
 
   await page.waitFor(2000); // time set deliberately for page to load
+
+  async function abc() {
+      try {
+        await page.evaluate(checkIfTwitterAccountExists, req.params.id);
+        return {found: false};
+      } catch (error) {
+        return {found: true};
+      }
+  }
 
   function checkIfTwitterAccountExists(twitterUser) {
     if (document.getElementsByClassName('errorpage-body-content')[0].firstElementChild.innerText == "Sorry, that page doesn’t exist!") {
@@ -67,9 +79,11 @@ router.get('/:id', async (req, res, next) => {
 
   let accountNonExistent = false;
 
+
+  //abc.then() // this is most probably just some typo
   try {
     accountNonExistent = await page.evaluate(checkIfTwitterAccountExists, req.params.id); // can become true after evaluation in function checkIfTwitterAccountExists
-  } catch (e) { // the huge block of code that follows is nested in this catch block and executes if puppeteer throws an error while evaluating if twitter account exists
+  } catch (e) { // huge block of code that follows is nested in this catch block and executes if puppeteer throws an error while evaluating if twitter account exists
     console.log(e); // if twitter account is found an error would be logged ("evaluation failed") and continue executing the following block of code
     console.log("Twitter account exists!");
     console.log("A new user is being created");
@@ -85,7 +99,8 @@ router.get('/:id', async (req, res, next) => {
     }
 
     const tweets = await scrTweets(page, extractTweets);
-    let uniqueTweets = [...new Set(tweets)];
+    let uniqueTweets = [...new Set(tweets)]; // firstly, new Set(tweets) is called and makes a set {"a", "b"} from the tweets array. 
+                                             // Then its members are spread with ... spread operator into uniqueTweets array.
 
     await browser.close();
 
@@ -127,7 +142,7 @@ router.get('/:id', async (req, res, next) => {
       console.log(analizedTweets);
       // *** END of Analysing tweets array uniqueTweets locally using "Natural"
 
-      // should have filtered categories  je da filtrira dobijene kategorije on the basis of probability, but it's too complex so it's commented-out:
+      // should have filtered categories  on the basis of probability, but it's too complex so it's commented-out:
       // let filteredAnalizedTweets = analizedTweets.filter(tweet => tweet.classifications.filter(item => Math.floor(item.value * 10) < 1).length == tweet.classifications.length); // filters only those that have at least one value starting on 2nd decimal 
       // console.log("Logging FILTERED tweets analysed by natural classifier: ");
       // console.log(filteredAnalizedTweets);
@@ -172,7 +187,7 @@ router.get('/:id', async (req, res, next) => {
         request(options, callback); // makes a http post request to a remote AI API
       }
 
-      setTimeout(sendToMeaningcloudForAnalysis, 1100 * a, options, function (err, response) { // sets a 1,1sec interval between sending request to meaningcloud.com API
+      setTimeout(sendToMeaningcloudForAnalysis, 1100 * a, options, function (err, response) { // sets a 1,1sec interval between sending request to meaningcloud.com API (server demands 1sec interval between requests)
         if (err) {
           console.log(err);
         } else {

@@ -9,7 +9,7 @@ router.post('/', function (req, res, next) {
     console.log("The following object has arrived and tweets will be stored with it's id");
     console.log(req.body.userDbObj);
   
-    fs.readFile('NaturalLanguageProcessing/trainingData.json', (err, file) => {
+    fs.readFile('NaturalLanguageProcessing/trainingData.json', (err, file) => { // err catching block is missing
       let oldArray = JSON.parse(file);
       let newArray = req.body.editedTweets.filter(tweet => tweet.category != 'unknown'); // exclude tweets for which the category is 'unknown'
   
@@ -41,9 +41,9 @@ router.post('/', function (req, res, next) {
           let trainingData = JSON.parse(file);
           classificator.teach("NaturalLanguageProcessing/trainedClassifier.json", trainingData, function (err, newClassifier) {
             if (err) {
-              return console.log(err);
+              console.log(err);
             }
-            console.log('Training saved!');
+              console.log('Training saved!');
           });
         });
   
@@ -54,7 +54,7 @@ router.post('/', function (req, res, next) {
       console.log("///////////");
   
       req.body.editedTweets.forEach(tweet => {
-        async function ckeckIfTweetExists() {
+        async function ckeckIfTweetExistsAndSave() {
           const existingTweet = await Tweet
             .findOne({ text: tweet.text });
           if (!existingTweet) {
@@ -74,7 +74,7 @@ router.post('/', function (req, res, next) {
             console.log("This tweet exists in db and will NOT be saved: ", existingTweet);
           }
         }
-        ckeckIfTweetExists();
+        ckeckIfTweetExistsAndSave();
       });
     });
   
