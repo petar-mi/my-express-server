@@ -17,7 +17,6 @@ nsp.on('connection', function (socket) { // listens to any new connection and ex
   socket.on("disconnect", () => console.log(`Client with id: ${socket.id} has disconnected`));
 });
 
-
 function extractTweets(tweets) {
   // const extractedParentElements = document.getElementsByClassName('css-901oao r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0');                               
   // previous line is for crawling while being logged-in!!! 
@@ -37,13 +36,14 @@ function extractTweets(tweets) {
 async function scrTweets(page, extractTweets) {
   let tweets = [];
   try {
-    for (let i = 0; i < 1; i++) { // sets the number of time scrolling will be performed (set to i < 1 for testing purposes only)
+    for (let i = 0; i < 2; i++) { // sets the number of time scrolling will be performed (set to i < 1 for testing purposes only)
       tweets = await page.evaluate(extractTweets, tweets);
       await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
       console.log(i + 1 + '. scroll performed');
-      await page.waitFor(3000); // time set deliberately so that feed is loaded
+      await page.waitFor(5000); // time set deliberately so that feed is loaded
     }
   } catch (e) {
+    console.log("We have an ERROR!");
     console.log(e);
   }
   return tweets;
@@ -59,7 +59,7 @@ router.get('/:id', async (req, res, next) => {
   page.setViewport({ width: 800, height: 800 });
   await page.goto(`https://twitter.com/${req.params.id}`);
 
-  await page.waitFor(2000); // time set deliberately for page to load
+  await page.waitFor(5000); // time set deliberately for page to load
 
   async function abc() {
       try {
@@ -80,7 +80,7 @@ router.get('/:id', async (req, res, next) => {
   let accountNonExistent = false;
 
 
-  //abc.then() // this is most probably just some typo
+  //abc.then() // this is most probably just some typo or addition by Vladimir
   try {
     accountNonExistent = await page.evaluate(checkIfTwitterAccountExists, req.params.id); // can become true after evaluation in function checkIfTwitterAccountExists
   } catch (e) { // huge block of code that follows is nested in this catch block and executes if puppeteer throws an error while evaluating if twitter account exists
@@ -97,7 +97,8 @@ router.get('/:id', async (req, res, next) => {
       console.log(newlyCreatedUser);
       console.log(newlyCreatedUser._id);
     }
-
+    
+    console.log(page._target._targetInfo.url);
     const tweets = await scrTweets(page, extractTweets);
     let uniqueTweets = [...new Set(tweets)]; // firstly, new Set(tweets) is called and makes a set {"a", "b"} from the tweets array. 
                                              // Then its members are spread with ... spread operator into uniqueTweets array.
