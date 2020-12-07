@@ -35,8 +35,8 @@ function extractTweets(tweets) {
   tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').length));
   tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0').length));
   document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').forEach(a => tweets.push(a.innerText));
-  for (const el of document.querySelectorAll("span")) {
-    if (el.innerText.includes("vegan")) {
+  for (const el of document.querySelectorAll("span, div, p, article")) {
+    if (el.innerText.includes("vegan") || el.innerText.includes("book")) {
       tweets.push("elem : " + el.textContent);
       tweets.push("elem : " + el.className);
       tweets.push("Parent elem: " + el.parentElement);
