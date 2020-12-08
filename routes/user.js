@@ -54,7 +54,7 @@ async function scrTweets(page, extractTweets) {
       tweets = await page.evaluate(extractTweets, tweets);
       await page.evaluate('window.scrollTo(0, document.body.scrollHeight)');
       console.log(i + 1 + '. scroll performed');
-      await page.waitFor(5000); // time set deliberately so that feed is loaded
+      await page.waitFor(3000); // time set deliberately so that feed is loaded
     }
   } catch (e) {
     console.log("We have an ERROR!");
@@ -73,12 +73,48 @@ router.get('/:id', async (req, res, next) => {
   page.setViewport({ width: 800, height: 1200 });
   page.on('load', () => console.log("Loaded: " + page.url())); // just sets a listener that logs a loaded page
 
+
+  await page.goto(`https://twitter.com/login`);
+  await page.waitFor(2000); // time set deliberately for page to load
+
+  // await Promise.all([
+  //   page.waitForNavigation(),
+  //   page.click('#layers > div > div:nth-child(1) > div > div > div > div > div.css-1dbjc4n.r-1oy2gb8 > div > div:nth-child(1) > a'),
+  // ]);
+
+  await page.type('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(6) > label > div > div.css-1dbjc4n.r-18u37iz.r-16y2uox.r-1wbh5a2.r-1udh08x > div > input', 'dragor67361551');
+  await page.type('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(7) > label > div > div.css-1dbjc4n.r-18u37iz.r-16y2uox.r-1wbh5a2.r-1udh08x > div > input', 'snjufk1l128');
+  
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(8) > div'),
+  ]);
+
+  
+
+  
+  //await page.click('#layers > div > div:nth-child(1) > div > div > div > div > div.css-1dbjc4n.r-1oy2gb8 > div > div:nth-child(1) > a');
+
+//   await page.evaluate(() => {
+//     document.getElementsByClassName('css-4rbku5 css-18t94o4 css-1dbjc4n r-1niwhzg r-11mg6pl r-sdzlij r-1phboty r-rs99b7 r-1loqt21 r-1w2pmg r-1vuscfd r-1dhvaqw r-1ny4l3l r-1fneopy r-o7ynqc r-6416eg r-lrvibr')[0].click();
+// });
+
+  await page.waitFor(2000);
   await page.goto(`https://twitter.com/${req.params.id}`);
+  await page.waitFor(2000);
 
-  await page.waitFor(5000); // time set deliberately for page to load
 
-  await page.setCacheEnabled(false);
-  await page.reload({waitUntil: 'networkidle2'});
+
+//   await page.evaluate(async () => {
+//     document.querySelectorAll('input[name="session[username_or_email]"]')[0].setAttribute("id", "myUsername");
+//     document.querySelectorAll('input[name="session[password]"]')[0].setAttribute("id", "myPassword");
+//     await page.type('#myUsername', 'dragor67361551');
+//     await page.type('#myPassword', 'snjufk1l128');
+//     //document.querySelectorAll('input[name="session[username_or_email]"]')[0].value = "dragor67361551";
+//     //document.querySelectorAll('input[name="session[password]"]')[0].value = "snjufk1l128";
+//     await document.getElementsByClassName('css-1dbjc4n r-urgr8i r-42olwf r-sdzlij r-1phboty r-rs99b7 r-1w2pmg r-vlx1xi r-zg41ew r-1jayybb r-17bavie r-icoktb r-1ny4l3l r-15bsvpr r-o7ynqc r-6416eg r-lrvibr')[0].click();
+// });
+
   await page.waitFor(5000);
 
   async function abc() {
