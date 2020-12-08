@@ -82,6 +82,7 @@ router.get('/:id', async (req, res, next) => {
   //   page.click('#layers > div > div:nth-child(1) > div > div > div > div > div.css-1dbjc4n.r-1oy2gb8 > div > div:nth-child(1) > a'),
   // ]);
 
+  try {
   await page.type('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(6) > label > div > div.css-1dbjc4n.r-18u37iz.r-16y2uox.r-1wbh5a2.r-1udh08x > div > input', 'dragor67361551');
   await page.type('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(7) > label > div > div.css-1dbjc4n.r-18u37iz.r-16y2uox.r-1wbh5a2.r-1udh08x > div > input', 'snjufk1l128');
   
@@ -89,6 +90,9 @@ router.get('/:id', async (req, res, next) => {
     page.waitForNavigation(),
     page.click('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(8) > div'),
   ]);
+  } catch (e) {
+    console.log("No login elements error: " + e)
+  }
 
   
 
