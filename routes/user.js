@@ -77,6 +77,10 @@ router.get('/:id', async (req, res, next) => {
 
   await page.waitFor(5000); // time set deliberately for page to load
 
+  await page.setCacheEnabled(false);
+  await page.reload({waitUntil: 'networkidle2'});
+  await page.waitFor(5000);
+
   async function abc() {
       try {
         await page.evaluate(checkIfTwitterAccountExists, req.params.id);
