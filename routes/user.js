@@ -31,19 +31,19 @@ function extractTweets(tweets) {
   }
   console.log(tweets);
   console.log("*********************************************");
-  tweets.push('css-901oao ' + String(document.getElementsByClassName('css-901oao').length));
-  tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6').length));
-  tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').length));
-  tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0').length));
-  document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').forEach(a => tweets.push(a.innerText));
-  for (const el of document.querySelectorAll("span, div, p, article")) {
-    if (el.innerText.includes("vegan") || el.innerText.includes("book")) {
-      tweets.push("elem : " + el.textContent);
-      tweets.push("elem : " + el.className);
-      tweets.push("Parent elem: " + el.parentElement);
-      tweets.push("Parent elem: " + el.parentElement.className);
-    }
-  }
+  // tweets.push('css-901oao ' + String(document.getElementsByClassName('css-901oao').length));
+  // tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6').length));
+  // tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').length));
+  // tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0').length));
+  // document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').forEach(a => tweets.push(a.innerText));
+  // for (const el of document.querySelectorAll("span, div, p, article")) {
+  //   if (el.innerText.includes("vegan") || el.innerText.includes("book")) {
+  //     tweets.push("elem : " + el.textContent);
+  //     tweets.push("elem : " + el.className);
+  //     tweets.push("Parent elem: " + el.parentElement);
+  //     tweets.push("Parent elem: " + el.parentElement.className);
+  //   }
+  // }
   return tweets;
 }
 
@@ -101,12 +101,16 @@ router.get('/:id', async (req, res, next) => {
 
   await page.waitFor(2000);
   
+  try {
   await page.type('#challenge_response', '+381641725696');
   await Promise.all([
     page.waitForNavigation(),
     page.click('#email_challenge_submit'),
   ]);
-  
+  } catch (e) {
+    console.log("Login challenge error :" + e);
+  }
+
   await page.waitFor(2000);
 
   await page.goto(`https://twitter.com/${req.params.id}`);
@@ -124,7 +128,7 @@ router.get('/:id', async (req, res, next) => {
 //     await document.getElementsByClassName('css-1dbjc4n r-urgr8i r-42olwf r-sdzlij r-1phboty r-rs99b7 r-1w2pmg r-vlx1xi r-zg41ew r-1jayybb r-17bavie r-icoktb r-1ny4l3l r-15bsvpr r-o7ynqc r-6416eg r-lrvibr')[0].click();
 // });
 
-  await page.waitFor(5000);
+  await page.waitFor(3000);
 
   async function abc() {
       try {
