@@ -100,6 +100,15 @@ router.get('/:id', async (req, res, next) => {
 // });
 
   await page.waitFor(2000);
+  
+  await page.type('#challenge_response', '+381641725696');
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click('#email_challenge_submit'),
+  ]);
+  
+  await page.waitFor(2000);
+
   await page.goto(`https://twitter.com/${req.params.id}`);
   await page.waitFor(2000);
 
