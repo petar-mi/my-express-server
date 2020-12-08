@@ -4,6 +4,7 @@ const puppeteer = require('puppeteer');
 const request = require("request");
 var classificator = require('../NaturalLanguageProcessing/brainStorm');
 const { User } = require('../models/userModel'); // must be required this way with parenthesis { User }, would't work otherwise
+const fs = require('fs'); // used to save Screenshot
 
 
 // SOCKET.IO LISTENER
@@ -93,6 +94,17 @@ router.get('/:id', async (req, res, next) => {
   }
 
   let accountNonExistent = false;
+
+  // SCREENSHOT 
+  console.log("Current directory:", __dirname);
+  await page.emulateMedia('screen');
+
+  const buffer = await page.screenshot({
+    fullPage: true,
+    type: 'png'
+  });
+  fs.writeFileSync(__dirname + '/screenshot.png', buffer.toString('binary'), 'binary');
+  // end of SCREENSHOT 
 
 
   //abc.then() // this is most probably just some typo or addition by Vladimir

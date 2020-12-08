@@ -13,10 +13,12 @@ const io = socketIo(server); // if namespace(nsp) isn't used, we would define th
 global.nsp = io.of('/my-namespace'); // instead of const nsp we are defining it as global.nsp for it to be available in user module as well
 
 const test = require('./routes/test');
+const test2 = require('./routes/test2');
 const checkUser = require('./routes/checkUser');
 const feed = require('./routes/feed');
 const user = require('./routes/user');
 app.use('/test', test);
+app.use('/test2', test2);
 app.use('/checkUser', checkUser);
 app.use('/feed', feed);
 app.use('/user', user);
