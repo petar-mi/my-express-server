@@ -19,31 +19,11 @@ nsp.on('connection', function (socket) { // listens to any new connection and ex
 });
 
 function extractTweets(tweets) {
-  // const extractedParentElements = document.getElementsByClassName('css-901oao r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0');                               
-  // previous line is for crawling while being logged-in!!! 
-  //const extractedParentElements = document.getElementsByClassName('TweetTextSize TweetTextSize--normal js-tweet-text tweet-text'); // when puppeteer crawls w/o logging-in
-  // const extractedParentElements = document.getElementsByClassName('css-901oao r-hkyrab r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0'); // modified on Oct 18 2020 to fit current twitter layout ( also when puppeteer crawls w/o logging-in)
   const extractedParentElements = document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0'); // modified on Dec 4 2020 to fit current twitter layout
   for (let element of extractedParentElements) {
-    // tweets.push(element.firstElementChild.innerText); // logged-in case
-    // tweets.push(element.innerText); // without logging-in  
     tweets.push(element.firstElementChild.innerText); // modified on Oct 18 2020 to fit current twitter layout
   }
-  console.log(tweets);
-  console.log("*********************************************");
-  // tweets.push('css-901oao ' + String(document.getElementsByClassName('css-901oao').length));
-  // tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6').length));
-  // tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').length));
-  // tweets.push('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0 ' + String(document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo r-bnwqim r-qvutc0').length));
-  // document.getElementsByClassName('css-901oao r-18jsvk2 r-1qd0xha r-a023e6 r-16dba41 r-ad9z0x r-bcqeeo').forEach(a => tweets.push(a.innerText));
-  // for (const el of document.querySelectorAll("span, div, p, article")) {
-  //   if (el.innerText.includes("vegan") || el.innerText.includes("book")) {
-  //     tweets.push("elem : " + el.textContent);
-  //     tweets.push("elem : " + el.className);
-  //     tweets.push("Parent elem: " + el.parentElement);
-  //     tweets.push("Parent elem: " + el.parentElement.className);
-  //   }
-  // }
+  
   return tweets;
 }
 
@@ -74,64 +54,37 @@ router.get('/:id', async (req, res, next) => {
   page.on('load', () => console.log("Loaded: " + page.url())); // just sets a listener that logs a loaded page
 
 
-  await page.goto(`https://twitter.com/login`);
+  await page.goto(`https://twitter.com/login`); 
   await page.waitFor(2000); // time set deliberately for page to load
 
-  // await Promise.all([
-  //   page.waitForNavigation(),
-  //   page.click('#layers > div > div:nth-child(1) > div > div > div > div > div.css-1dbjc4n.r-1oy2gb8 > div > div:nth-child(1) > a'),
-  // ]);
-
-  try {
+  try { // tries to log-in, if not already logged-in
   await page.type('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(6) > label > div > div.css-1dbjc4n.r-18u37iz.r-16y2uox.r-1wbh5a2.r-1udh08x > div > input', 'dragor67361551');
-  await page.type('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(7) > label > div > div.css-1dbjc4n.r-18u37iz.r-16y2uox.r-1wbh5a2.r-1udh08x > div > input', 'snjufk1l128');
+  await page.type('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(7) > label > div > div.css-1dbjc4n.r-18u37iz.r-16y2uox.r-1wbh5a2.r-1udh08x > div > input', 'novasifra2828');
   
   await Promise.all([
     page.waitForNavigation(),
     page.click('#react-root > div > div > div.css-1dbjc4n.r-13qz1uu.r-417010 > main > div > div > div.css-1dbjc4n.r-13qz1uu > form > div > div:nth-child(8) > div'),
   ]);
   } catch (e) {
-    console.log("No login elements error: " + e)
+    console.log("No login elements error (was already logged-in): " + e)
   }
-
-  
-
-  
-  //await page.click('#layers > div > div:nth-child(1) > div > div > div > div > div.css-1dbjc4n.r-1oy2gb8 > div > div:nth-child(1) > a');
-
-//   await page.evaluate(() => {
-//     document.getElementsByClassName('css-4rbku5 css-18t94o4 css-1dbjc4n r-1niwhzg r-11mg6pl r-sdzlij r-1phboty r-rs99b7 r-1loqt21 r-1w2pmg r-1vuscfd r-1dhvaqw r-1ny4l3l r-1fneopy r-o7ynqc r-6416eg r-lrvibr')[0].click();
-// });
 
   await page.waitFor(2000);
   
-  try {
+  try { // if, after logging-in, phone number is needed
   await page.type('#challenge_response', '+381641725696');
   await Promise.all([
     page.waitForNavigation(),
     page.click('#email_challenge_submit'),
   ]);
   } catch (e) {
-    console.log("Login challenge error :" + e);
+    console.log("Login challenge not present error :" + e);
   }
 
   await page.waitFor(2000);
 
   await page.goto(`https://twitter.com/${req.params.id}`);
-  await page.waitFor(2000);
-
-
-
-//   await page.evaluate(async () => {
-//     document.querySelectorAll('input[name="session[username_or_email]"]')[0].setAttribute("id", "myUsername");
-//     document.querySelectorAll('input[name="session[password]"]')[0].setAttribute("id", "myPassword");
-//     await page.type('#myUsername', 'dragor67361551');
-//     await page.type('#myPassword', 'snjufk1l128');
-//     //document.querySelectorAll('input[name="session[username_or_email]"]')[0].value = "dragor67361551";
-//     //document.querySelectorAll('input[name="session[password]"]')[0].value = "snjufk1l128";
-//     await document.getElementsByClassName('css-1dbjc4n r-urgr8i r-42olwf r-sdzlij r-1phboty r-rs99b7 r-1w2pmg r-vlx1xi r-zg41ew r-1jayybb r-17bavie r-icoktb r-1ny4l3l r-15bsvpr r-o7ynqc r-6416eg r-lrvibr')[0].click();
-// });
-
+  
   await page.waitFor(3000);
 
   async function abc() {
@@ -152,7 +105,7 @@ router.get('/:id', async (req, res, next) => {
 
   let accountNonExistent = false;
 
-  // SCREENSHOT 
+  // takes a SCREENSHOT used for debbuging puppeteer on heroku, image available at: https://my-express-server.herokuapp.com/test2/whatever  
   console.log("Current directory:", __dirname);
   await page.emulateMedia('screen');
 
