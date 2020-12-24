@@ -23,8 +23,9 @@ app.use('/checkUser', checkUser);
 app.use('/feed', feed);
 app.use('/user', user);
 
-let connectionString = "mongodb://psmokvic:novasifra1@ds052978.mlab.com:52978/tweets_db";
-if (process.env.REACT_APP_MY_MACHINE && process.env.REACT_APP_MY_MACHINE === "zekan") {
+// let connectionString = "mongodb://psmokvic:novasifra1@ds052978.mlab.com:52978/tweets_db"; // previous mLab connection string, now migrated to MongoDb Atlas
+let connectionString = "mongodb+srv://psmokvic:novasifra1@tweets-db.ut8lw.mongodb.net/tweets_db?retryWrites=true&w=majority";
+if (process.env.REACT_APP_MY_MACHINE && process.env.REACT_APP_MY_MACHINE === "zekan") {  
   connectionString = 'mongodb://localhost:27017/tweetsDB';
   console.log('running on localserver');
 }
