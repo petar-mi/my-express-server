@@ -72,7 +72,7 @@ router.get('/:id', async (req, res, next) => {
   await page.waitFor(2000);
   
   try { // if, after logging-in, phone number is needed
-  await page.type('#challenge_response', '+381641725696');
+  await page.type('#challenge_response', process.env.TWITTER_PHONE_VERIFY);
   await Promise.all([
     page.waitForNavigation(),
     page.click('#email_challenge_submit'),
@@ -198,7 +198,7 @@ router.get('/:id', async (req, res, next) => {
           url: 'https://api.meaningcloud.com/class-1.1',
           headers: { 'content-type': 'application/x-www-form-urlencoded' },
           form: {
-            key: '246b149fa5d4b95ce592d9b847f238d3', // 1.thing.needed@gmail.com krofnica_987# 
+            key: '246b149fa5d4b95ce592d9b847f238d3', 
             txt: uniqueTweets[a],
             url: '',
             doc: '',
@@ -211,7 +211,7 @@ router.get('/:id', async (req, res, next) => {
           url: 'https://api.meaningcloud.com/class-1.1',
           headers: { 'content-type': 'application/x-www-form-urlencoded' },
           form: {
-            key: '077482e2887f12919c0d55cee4d55537', // bobana linkedin
+            key: '077482e2887f12919c0d55cee4d55537', 
             txt: uniqueTweets[a],
             url: '',
             doc: '',
